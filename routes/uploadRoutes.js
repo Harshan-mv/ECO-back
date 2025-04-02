@@ -17,3 +17,4 @@ router.post("/", upload.single("image"), (req, res) => {
 }); // ✅ Closing curly brace added
 
 export default router;
+ 
