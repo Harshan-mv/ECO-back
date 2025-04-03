@@ -12,7 +12,6 @@ import greenScoreRoutes from "./routes/greenScoreRoutes.js";
 import foodDonationRoutes from "./routes/foodDonationRoutes.js";
 
 
-
 dotenv.config();
 connectDB();
 
@@ -46,7 +45,7 @@ app.use(express.json());
 // Routes
 app.use("/api/upload", uploadRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/blogs", blogRoutes);
+app.use("/api/blogs",blogRoutes);
 app.use("/api/green-score", greenScoreRoutes);
 app.use("/api/food-donations", foodDonationRoutes);
 

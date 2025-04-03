@@ -3,7 +3,8 @@ import { createFoodDonation, getFoodDonations,getAvailableDonations, claimFoodDo
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
-import protect from "../middleware/authMiddleware.js"; // Ensure this import is correct
+import { protect } from "../middleware/authMiddleware.js"; // ✅ Use named import
+
 // Fix for __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

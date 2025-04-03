@@ -2,6 +2,7 @@ import express from "express";
 import Blog from "../models/Blog.js";
 import mongoose from "mongoose";
 const router = express.Router();
+import { protect } from "../middleware/authMiddleware.js"; // 
 
 // POST: Create a new blog
 router.post("/", async (req, res) => {
@@ -71,4 +72,23 @@ router.post("/:id/comments", async (req, res) => {
   });
   
 
+  // DELETE: Remove a blog post
+  router.delete("/:id", protect, async (req, res) => {
+    try {
+      const blog = await Blog.findById(req.params.id);
+      if (!blog) return res.status(404).json({ message: "Blog not found" });
+  
+      // Ensure only the blog author or an admin can delete
+      if (blog.author.toString() !== req.user.id && req.user.role !== "admin") {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
+  
+      await Blog.findByIdAndDelete(req.params.id);
+      res.json({ message: "Blog deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  
+  
 export default router;
