@@ -41,6 +41,8 @@ app.options("*", cors());
 
 
 app.use(express.json());
+// Serve static files (for uploaded images)
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 app.use("/api/upload", uploadRoutes);
@@ -48,9 +50,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/blogs",blogRoutes);
 app.use("/api/green-score", greenScoreRoutes);
 app.use("/api/food-donations", foodDonationRoutes);
-
-// Serve static files (for uploaded images)
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
