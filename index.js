@@ -55,5 +55,6 @@ app.use("/api/food-donations", foodDonationRoutes);
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+serviceWorkerRegistration.unregister();
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
