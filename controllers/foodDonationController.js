@@ -49,10 +49,10 @@ export const createFoodDonation = async (req, res) => {
       expiryDate,
       storageInstructions,
       pickupAddress,
-      foodImage, // now a Cloudinary URL
+      foodImage,
       status: "available",
+      donorId, // ✅ FIXED: required by schema
     });
-
     // Save to database
     await newDonation.save();
     res.status(201).json({
@@ -101,9 +101,9 @@ export const claimFoodDonation = async (req, res) => {
       return res.status(404).json({ message: "Food donation not found." });
     }
 
-    if (donation.donorId === receiverId) {
+    if (donation.donorId.toString() === receiverId.toString()) {
       return res.status(403).json({ message: "You cannot claim your own food donation." });
-    }
+    }    
 
     if (donation.status !== "available") {
       return res.status(400).json({ message: "This food donation is no longer available." });
