@@ -49,7 +49,7 @@ router.post("/", protect, async (req, res) => {
 // ✅ GET: Fetch all blogs
 router.get("/", async (req, res) => {
   try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
+    const blogs = await Blog.find().populate("author", "name").sort({ createdAt: -1 });
     res.json(blogs);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch blogs." });
@@ -96,6 +96,7 @@ router.post("/:id/comments", async (req, res) => {
 });
 
 // ✅ DELETE: Remove a blog post (Only Author or Admin)
+// ✅ DELETE: Remove a blog post (Only Author or Admin)
 router.delete("/:id", protect, async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
@@ -118,5 +119,6 @@ router.delete("/:id", protect, async (req, res) => {
     res.status(500).json({ message: "❌ Server error while deleting blog." });
   }
 });
+
 
 export default router;
