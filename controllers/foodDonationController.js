@@ -86,11 +86,11 @@ export const getAvailableDonations = async (req, res) => {
   }
 };
 
-// Claim a food donation
+// ✅ Claim a food donation
 export const claimFoodDonation = async (req, res) => {
   try {
     const { id } = req.params;
-    const receiverId = req.user._id; // 🔥 Get from middleware
+    const receiverId = req.user._id; // 🔥 Extracted from middleware
     console.log("User from token:", req.user);
 
     if (!receiverId) {
@@ -110,12 +110,14 @@ export const claimFoodDonation = async (req, res) => {
       return res.status(400).json({ message: "This food donation is no longer available." });
     }
 
+    // Update donation status
     donation.status = "claimed";
     donation.receiverId = receiverId;
     await donation.save();
 
-    res.status(200).json({ message: "Food donation claimed successfully!", donation });
+    res.status(200).json({ message: "✅ Food donation claimed successfully!", donation });
   } catch (error) {
+    console.error("❌ Error claiming food donation:", error);
     res.status(500).json({ message: "Error claiming food donation", error: error.message });
   }
 };
