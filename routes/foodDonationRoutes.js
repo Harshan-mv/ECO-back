@@ -3,9 +3,8 @@ import {
   createFoodDonation,
   getFoodDonations,
   getAvailableDonations,
-  claimFoodDonation
+  claimFoodDonation, deleteFoodDonation // 👈 import it
 } from "../controllers/foodDonationController.js";
-
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -40,7 +39,8 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 // ✅ Routes
-router.post("/", upload.single("foodImage"), createFoodDonation);
+router.delete("/:id", protect, deleteFoodDonation); // ✅ NEW
+router.post("/",protect, upload.single("foodImage"), createFoodDonation);
 router.get("/", getFoodDonations);
 router.get("/available", getAvailableDonations);
 router.put("/claim/:id", protect, claimFoodDonation);

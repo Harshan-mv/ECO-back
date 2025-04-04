@@ -12,6 +12,7 @@ const FoodDonationSchema = new mongoose.Schema(
     storageInstructions: { type: String },
     pickupAddress: { type: String, required: true }, // Now just a string
     foodImage: { type: String },
+    donorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     status: { type: String, enum: ["available", "claimed"], default: "available" }, // New field
     receiverId: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null }, // Who claimed it
   },

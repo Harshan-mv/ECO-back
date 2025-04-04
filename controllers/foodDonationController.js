@@ -34,7 +34,7 @@ export const createFoodDonation = async (req, res) => {
     if (new Date(cookingDate) >= new Date(expiryDate)) {
       return res.status(400).json({ message: "Cooking date must be before expiry date." });
     }
-
+    const donorId = req.user._id; // ✅ Comes from protect middleware
     // ✅ Cloudinary image URL
     const foodImage = req.file ? req.file.path : null;
 
@@ -116,6 +116,27 @@ export const claimFoodDonation = async (req, res) => {
     res.status(200).json({ message: "Food donation claimed successfully!", donation });
   } catch (error) {
     res.status(500).json({ message: "Error claiming food donation", error: error.message });
+  }
+};
+// Delete a food donation
+export const deleteFoodDonation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id; // Comes from verifyToken middleware
+
+    const donation = await FoodDonation.findById(id);
+    if (!donation) {
+      return res.status(404).json({ message: "Food donation not found." });
+    }
+
+    if (donation.donorId.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "You are not authorized to delete this donation." });
+    }
+
+    await donation.deleteOne();
+    res.status(200).json({ message: "Food donation deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting food donation", error: error.message });
   }
 };
 
