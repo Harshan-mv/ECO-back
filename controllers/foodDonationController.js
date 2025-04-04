@@ -91,6 +91,7 @@ export const claimFoodDonation = async (req, res) => {
   try {
     const { id } = req.params;
     const receiverId = req.user._id; // 🔥 Get from middleware
+    console.log("User from token:", req.user);
 
     if (!receiverId) {
       return res.status(400).json({ message: "Receiver ID is required to claim food." });
@@ -125,8 +126,8 @@ export const deleteFoodDonation = async (req, res) => {
     const userId = req.user._id; // Comes from verifyToken middleware
 
     const donation = await FoodDonation.findById(id);
-    if (!donation) {
-      return res.status(404).json({ message: "Food donation not found." });
+    if (!donation || !donation.donorId) {
+      return res.status(404).json({ message: "Food donation not found or donorId missing." });
     }
 
     if (donation.donorId.toString() !== userId.toString()) {
