@@ -102,7 +102,7 @@ export const claimFoodDonation = async (req, res) => {
       return res.status(404).json({ message: "Food donation not found." });
     }
 
-    if (donation.donorId.toString() === receiverId.toString()) {
+    if (donation.donorId && donation.donorId.toString() === receiverId.toString()) {
       return res.status(403).json({ message: "You cannot claim your own food donation." });
     }    
 
