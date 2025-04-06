@@ -87,23 +87,32 @@ router.post("/:id/comments", async (req, res) => {
   }
 
   try {
+    console.log("📌 Looking for blog:", req.params.id);
     const blog = await Blog.findById(req.params.id);
-    if (!blog) return res.status(404).json({ message: "Blog not found." });
-
+  
+    if (!blog) {
+      console.log("❌ Blog not found");
+      return res.status(404).json({ message: "Blog not found." });
+    }
+  
     const newComment = {
-      user: new mongoose.Types.ObjectId(user), // ✅ make sure it's stored as ObjectId
+      user: new mongoose.Types.ObjectId(user),
       text,
       timestamp: new Date(),
     };
-
+  
+    console.log("🛠 Adding comment:", newComment);
     blog.comments.push(newComment);
+  
+    console.log("💾 Saving blog...");
     await blog.save();
-
+  
+    console.log("✅ Comment saved. Returning updated comments.");
     res.status(201).json({ message: "Comment added", comments: blog.comments });
   } catch (error) {
-    console.error(error);
+    console.error("🔥 Error in comment route:", error);
     res.status(500).json({ message: "Failed to add comment." });
-  }
+  }  
 });
 // DELETE /blogs/:blogId/comments/:commentId
 // DELETE /blogs/:blogId/comments/:commentId
