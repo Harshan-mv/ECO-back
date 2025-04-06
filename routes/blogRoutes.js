@@ -96,7 +96,7 @@ router.post("/:id/comments", async (req, res) => {
 });
 // DELETE /blogs/:blogId/comments/:commentId
 // DELETE /blogs/:blogId/comments/:commentId
-router.delete("/:blogId/comments/:commentId", verifyToken, async (req, res) => {
+router.delete("/:blogId/comments/:commentId", protect, async (req, res) => {
   const { blogId, commentId } = req.params;
   const userId = req.user._id;
 
