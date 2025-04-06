@@ -69,7 +69,6 @@ router.get("/:id", async (req, res) => {
 
     res.json(blog);
   } catch (error) {
-    console.error("❌ Error fetching blog:", error);
     res.status(500).json({ message: "Failed to fetch blog." });
   }
 });
@@ -77,7 +76,7 @@ router.get("/:id", async (req, res) => {
 // ✅ POST: Add comment to a blog
 // ✅ POST: Add comment to a blog
 router.post("/:id/comments", async (req, res) => {
-  console.log("🔍 Incoming comment:", req.body);
+  
   const { user, text } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(user)) {
@@ -89,11 +88,11 @@ router.post("/:id/comments", async (req, res) => {
   }
 
   try {
-    console.log("📌 Looking for blog:", req.params.id);
+    
     const blog = await Blog.findById(req.params.id);
   
     if (!blog) {
-      console.log("❌ Blog not found");
+      
       return res.status(404).json({ message: "Blog not found." });
     }
   
@@ -103,16 +102,16 @@ router.post("/:id/comments", async (req, res) => {
       timestamp: new Date(),
     };
   
-    console.log("🛠 Adding comment:", newComment);
+    
     blog.comments.push(newComment);
   
-    console.log("💾 Saving blog...");
+    
     await blog.save();
   
-    console.log("✅ Comment saved. Returning updated comments.");
+    
     res.status(201).json({ message: "Comment added", comments: blog.comments });
   } catch (error) {
-    console.error("🔥 Error in comment route:", error);
+    
     res.status(500).json({ message: "Failed to add comment." });
   }  
 });
@@ -144,7 +143,7 @@ router.delete("/:blogId/comments/:commentId", protect, async (req, res) => {
 
     res.status(200).json({ message: "Comment deleted" });
   } catch (err) {
-    console.error("❌ DELETE comment error:", err);
+    
     res.status(500).json({ message: "Server error" });
   }
 });

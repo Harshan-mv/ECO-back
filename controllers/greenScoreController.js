@@ -6,8 +6,6 @@ import mongoose from "mongoose";
 // ✅ Submit Green Score
 export const submitGreenScore = async (req, res) => {
   try {
-    console.log("📥 Incoming Request Data:", req.body); // Debugging log
-
     const { userId, billType, billNumber, itemPurchased, purchaseDate, vendor, purchaseMode, ecoCertification, totalAmount } = req.body;
 
     // 🛑 Check if userId is valid
@@ -41,9 +39,6 @@ export const submitGreenScore = async (req, res) => {
     user.greenScore = (user.greenScore || 0) + greenScore; // Initialize if undefined
     user.badge = assignBadge(user.greenScore);
     await user.save();
-
-    console.log("✅ Updated User Score:", user.greenScore); // Debugging log
-
     return res.status(201).json({
       success: true,
       greenScore: user.greenScore,
@@ -51,7 +46,6 @@ export const submitGreenScore = async (req, res) => {
       data: submission, // For debugging
     });
   } catch (error) {
-    console.error("❌ Error submitting Green Score:", error);
     res.status(500).json({ success: false, message: "Error submitting Green Score", error });
   }
 };
@@ -71,16 +65,12 @@ export const getUserGreenScore = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
-
-    console.log("✅ Fetching User Green Score:", user.greenScore); // Debugging log
-
     res.status(200).json({
       success: true,
       greenScore: user.greenScore || 0, // Ensure it’s not undefined
       badge: user.badge || "🌱 Eco Beginner",
     });
   } catch (error) {
-    console.error("❌ Error fetching Green Score:", error);
     res.status(500).json({ success: false, message: "Error fetching Green Score", error });
   }
 };
@@ -118,7 +108,6 @@ export const getLeaders = async (req, res) => {
   
       res.status(200).json({ success: true, leaders: usersWithDetails });
     } catch (error) {
-      console.error("❌ Error fetching leaders:", error);
       res.status(500).json({ success: false, message: "Error fetching leaderboard", error });
     }
   };

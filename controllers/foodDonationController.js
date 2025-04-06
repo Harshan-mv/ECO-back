@@ -91,8 +91,6 @@ export const claimFoodDonation = async (req, res) => {
   try {
     const { id } = req.params;
     const receiverId = req.user._id; // 🔥 Extracted from middleware
-    console.log("User from token:", req.user);
-
     if (!receiverId) {
       return res.status(400).json({ message: "Receiver ID is required to claim food." });
     }
@@ -117,7 +115,6 @@ export const claimFoodDonation = async (req, res) => {
 
     res.status(200).json({ message: "✅ Food donation claimed successfully!", donation });
   } catch (error) {
-    console.error("❌ Error claiming food donation:", error);
     res.status(500).json({ message: "Error claiming food donation", error: error.message });
   }
 };
