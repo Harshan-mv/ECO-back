@@ -75,6 +75,7 @@ router.get("/:id", async (req, res) => {
 // ✅ POST: Add comment to a blog
 // ✅ POST: Add comment to a blog
 router.post("/:id/comments", async (req, res) => {
+  console.log("🔍 Incoming comment:", req.body);
   const { user, text } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(user)) {
