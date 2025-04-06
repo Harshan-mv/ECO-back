@@ -8,11 +8,11 @@ const blogSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   comments: [
     {
-      user: { type: String, required: true },
+      user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // 🔁 changed from String to ObjectId ref
       text: { type: String, required: true },
       timestamp: { type: Date, default: Date.now },
     },
-  ],
+  ],  
 });
 
 const Blog = mongoose.model("Blog", blogSchema);

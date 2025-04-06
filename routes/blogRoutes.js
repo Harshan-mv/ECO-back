@@ -73,8 +73,13 @@ router.get("/:id", async (req, res) => {
 });
 
 // ✅ POST: Add comment to a blog
+// ✅ POST: Add comment to a blog
 router.post("/:id/comments", async (req, res) => {
   const { user, text } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(user)) {
+    return res.status(400).json({ message: "Invalid user ID." });
+  }
 
   if (!text) {
     return res.status(400).json({ message: "Comment text is required." });
@@ -84,13 +89,18 @@ router.post("/:id/comments", async (req, res) => {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ message: "Blog not found." });
 
-    const newComment = { user, text, timestamp: new Date() };
-    blog.comments = blog.comments || [];
-    blog.comments.push(newComment);
+    const newComment = {
+      user: new mongoose.Types.ObjectId(user), // ✅ make sure it's stored as ObjectId
+      text,
+      timestamp: new Date(),
+    };
 
+    blog.comments.push(newComment);
     await blog.save();
+
     res.status(201).json({ message: "Comment added", comments: blog.comments });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Failed to add comment." });
   }
 });
