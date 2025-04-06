@@ -115,7 +115,6 @@ router.post("/:id/comments", async (req, res) => {
   }  
 });
 // DELETE /blogs/:blogId/comments/:commentId
-// DELETE /blogs/:blogId/comments/:commentId
 router.delete("/:blogId/comments/:commentId", protect, async (req, res) => {
   const { blogId, commentId } = req.params;
   const userId = req.user._id;
@@ -136,6 +135,7 @@ router.delete("/:blogId/comments/:commentId", protect, async (req, res) => {
     res.status(200).json({ message: "Comment deleted" });
   } catch (err) {
     console.error(err);
+    console.error("❌ DELETE comment error:", err); // Add this
     res.status(500).json({ message: "Server error" });
   }
 });
