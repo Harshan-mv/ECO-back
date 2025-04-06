@@ -123,22 +123,30 @@ router.delete("/:blogId/comments/:commentId", protect, async (req, res) => {
     const blog = await Blog.findById(blogId);
     if (!blog) return res.status(404).json({ message: "Blog not found" });
 
-    const comment = blog.comments.id(commentId);
-    if (!comment) return res.status(404).json({ message: "Comment not found" });
+    const commentIndex = blog.comments.findIndex(
+      (c) => c._id.toString() === commentId
+    );
+    if (commentIndex === -1)
+      return res.status(404).json({ message: "Comment not found" });
+
+    const comment = blog.comments[commentIndex];
 
     if (comment.user.toString() !== userId.toString()) {
-      return res.status(403).json({ message: "Not authorized to delete this comment" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this comment" });
     }
 
-    comment.remove();
+    blog.comments.splice(commentIndex, 1);
     await blog.save();
+
     res.status(200).json({ message: "Comment deleted" });
   } catch (err) {
-    console.error(err);
-    console.error("❌ DELETE comment error:", err); // Add this
+    console.error("❌ DELETE comment error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 // ✅ DELETE: Remove a blog post (Only Author or Admin)
